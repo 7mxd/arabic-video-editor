@@ -112,7 +112,9 @@ Stages: `detect --kinds barcode` 14 s · `boxes --add` for the certificate 84 s 
 - **After the fix:** the grade line is less covered at 7.50 s (47 → 26 %), 8.50 s (45 → 22 %), 9.07 s (68 → 42 %), 14.00 s (32 → 20 %) and 14.50 s (38 → 27 %). The certificate blur still reaches 30–52 px above the digit tops.
 - **Subagent QA (blind, 2× zooms, 14 frames from 5.50 s to 14.50 s):** no certificate digit readable and no barcode bar countable. One unreadable digit-top smudge shows through the blur on 8 frames, the same as in 1.1.3 (it lies inside the blurred area). The grade line scored one point higher on 6 frames.
 - **Owner review:** pass, 92/100 (1.1.3: 82/100). A code review then made the barcode cut safer (tracked frames only, no deeper than the box's margin); the grade line stayed the same.
-- **Next:** at 4.90–4.93 s the bars box is tracked about 500 px off the barcode (the same in 1.1.3). The barcode there is low-resolution and motion-blurred, and subagent reads disagree on whether its blocks can be counted. Check that frame range next.
+- **4.90–4.93 s (found after the 92 render, the same in 1.1.3):** the slab enters fast before the first anchor (5.0 s); the frames tracked back from it matched 0.61–0.70 at the wrong place, and about 20 barcode bars were countable, unblurred. Fix: past the first or last anchor a frame needs a match of 0.75 (`EDGE_MIN`); a weaker one is blurred over its own box and the nearest good box, widened 2×. On the clip this changes frames 146–149 only; every frame past the last anchor matched 0.81 or more and is unchanged. Blind QA on 16 frames (4.90 s to 14.50 s): no leak; the other 14 frames match the 92 render. 247 tests pass.
+- **Owner review after the fix:** pass, 94/100.
+- **Strength:** at `--strength 101` the digit-top smudge is gone on all 8 frames and the grade line scores the same; `references/blur.md` now suggests 101 for a big target in 1080×1920.
 
 ## 1.1.3 real-clip check (2026-11-13)
 

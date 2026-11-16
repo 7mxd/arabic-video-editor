@@ -6,6 +6,11 @@
 
 - **A text line's margin grew with its snapped box:** `snap_to_ink` can grow a route B box into the ink next to it (on the real clip, the certificate line's boxes grew from 75 to 96–107 px tall, into the barcode below). The 0.35 × margin was taken from that grown box, so it reached up into the grade line above. The margin now comes from the box as marked; the snapped box is still what is tracked and covered. Bars boxes keep the snapped box's margin.
 - **A bars box past the text line over it:** a tall bars box takes a large margin, and on some frames it reached past the edge of the text line that covers its side, into the next line. Each frame where both are tracked now cuts the bars box at that line's outer edge, along the line's length only, and no deeper than the bars box's margin on that side. A line that covers a side at any anchor counts. Widened, held or lost frames cut nothing.
+- **Bars showed for two frames as an item entered the shot:** on a fast entry before the first anchor, the frames tracked back from it matched weakly (0.61–0.70) at the wrong place, and the barcode was not covered at all. A route B frame past the first or last anchor now needs a match of at least 0.75 (`EDGE_MIN`); a weaker one is blurred over both its own box and the nearest good box, widened 2×, so an item leaving the shot past the last anchor stays covered too.
+
+### Changed
+
+- `references/blur.md`: the suggested strength for a big target in a 1080×1920 video is now 101 (was 61). At 101 the digit tops no longer show through the certificate blur on the real clip, and the lines next to it stay as sharp.
 
 ## 1.1.3 — 2026-11-13
 

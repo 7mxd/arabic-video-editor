@@ -32,6 +32,8 @@ TRACK_GROW = 1.0      # route B: track a patch this many short sides taller abov
                       #   text box alone has too few features), then map the result back onto the box
 LINE_RATIO = 3        # snapping and the taller patch apply only to a text line: long side >= 3 x short side
 MATCH_MIN = 0.5       # route B: a tracked frame counts only if, warped back, it matches its anchor's patch this well
+EDGE_MIN = 0.75       #   past the first / last anchor: this well, else also blurred over the nearest good box (fast entries)
+EDGE_WIDEN = 2.0      #   that box grown this much (as apply_failsafe holds a lost frame)
 SEARCH_NEAR = 0.08    # re-detect around a tracked patch: this x its long side (+3 px) in every direction
 SEARCH_GAP = 0.3      #   around a predicted patch (frames the tracker lost or got wrong), plus one frame's motion
 ECC_SHAPE = 0.08      # ECC may turn and move the patch, but not stretch either side by more than this
@@ -544,7 +546,34 @@ def _track_anchors(video, anchors, t0, t1, pad, cache, size, verify=False, bars=
     out = [best[i] for i in sorted(best)]
     found = [k for k, f in enumerate(out) if f.state != "lost"]
     # the item's own span only: before it first shows / after it last shows is not "lost" (same as route A)
-    return out[found[0]:found[-1] + 1] if found else out
+    out = out[found[0]:found[-1] + 1] if found else out
+    if verify:                                                           # conf = the match score
+        fps = bt.probe(Path(video))[2]
+        a, b = round(anchors[0][0] * fps), round(anchors[-1][0] * fps)
+        # past the end anchors a fast move (the item entering the shot) can match weakly at the wrong place, or
+        # weakly at the right one (leaving it): a weak frame there is blurred over its own box and the nearest good
+        # box toward the anchors, widened like a held frame
+        out = _edge_hold(out, a, b)
+    return out
+
+
+def _edge_hold(frames, a, b):
+    """frames: one item's FrameBoxes in order; a, b: its first and last anchor's frame."""
+    out = list(frames)
+    for ks in (range(len(out)), range(len(out) - 1, -1, -1)):           # forward: past b; backward: before a
+        good = None
+        for k in ks:
+            f = out[k]
+            past = f.i > b if ks.step == 1 else f.i < a
+            if f.state == "lost" or f.poly is None:
+                continue
+            if not past or f.conf >= EDGE_MIN:
+                good = np.asarray(f.poly, float)
+            elif good is not None:
+                q = np.concatenate([bt.grow(good, EDGE_WIDEN), np.asarray(f.poly, float)])
+                hull = cv2.convexHull(np.float32(q)).reshape(-1, 2)
+                out[k] = bt.replace(f, poly=bt._plist(hull), state="widened")
+    return out
 
 
 # ---- route B: check each tracked frame, re-detect the rest ---------------------------------------------------------

@@ -770,7 +770,8 @@ def test_boxes_bars_box_stops_at_the_text_line_over_it(vids, tmp_path, monkeypat
     for i in both:
         L, B = np.float32(seen[i, 0].poly), np.float32(seen[i, 1].poly)
         top, x0, x1 = L[:, 1].min(), L[:, 0].min() + 3, L[:, 0].max() - 3
-        assert not any(_inside(B, (x, top - 4)) for x in np.linspace(x0, x1, 12)), (i, top, B[:, 1].min())
+        cut = seen[i, 0].state == seen[i, 1].state == "tracked"         # widened frames are not cut (privacy first)
+        assert not cut or not any(_inside(B, (x, top - 4)) for x in np.linspace(x0, x1, 12)), (i, top, B[:, 1].min())
         assert covered([(1, B)], truth[i][0]), i
 
 
@@ -1016,3 +1017,62 @@ def test_snap_and_patch_only_for_text_lines():
 def test_track_patch_contains_the_box():
     x, y, w, h = _detect.track_patch((10.4, 100.6, 200.3, 20.6), 800, 600)
     assert x <= 10.4 and y <= 100.6 and x + w >= 210.7 and y + h >= 121.2
+
+
+# ---- v1.1.4: weak frames past the first / last anchor --------------------------------------------------------------
+@pytest.mark.parametrize("edge", ["first", "last"])
+def test_track_anchors_holds_weak_frames_past_the_end_anchors(monkeypatch, edge):
+    """Hook 4.90/4.93 s: the slab enters fast before the first anchor (5.0 s); the frames tracked back from it matched
+    0.61-0.70 at the wrong place and the bars showed. Past the first / last anchor a frame needs EDGE_MIN, else it
+    is blurred over its own box and the nearest good one, widened. Good frames there stay as tracked."""
+    box = lambda x, y: [(x, y), (x + 400, y), (x + 400, y + 150), (x, y + 150)]  # noqa: E731
+    real = {i: (100 + 3 * (i - 150), 1500) for i in range(140, 191)}             # where the item is
+    bad = {147: .61, 148: .67, 149: .70} if edge == "first" else {184: .61, 185: .67, 186: .70}
+    wrong = {i: (real[i][0] + 330, real[i][1] - 250) for i in bad}
+
+    def fake_verify(video, anchors, tracks, w, h, pad=True, bars=False, sizes=None):
+        out = [bt.FrameBox(146, None, 0.0, "lost")] if edge == "first" else []
+        for i in range(147, 187):
+            x, y = wrong.get(i, real[i])
+            out.append(bt.FrameBox(i, box(x, y), bad.get(i, 1.0 if i in (150, 180) else .8), "tracked"))
+        return out + ([bt.FrameBox(187, None, 0.0, "lost")] if edge == "last" else [])
+
+    monkeypatch.setattr(bt, "track_box", lambda *a, **k: [])
+    monkeypatch.setattr(bt, "probe", lambda v: (1080, 1920, 30.0, False))
+    monkeypatch.setattr(_detect, "verify_track", fake_verify)
+    frames = _detect.track_anchors(Path("v.mp4"), [(5.0, (100, 1500, 400, 150)), (6.0, (190, 1500, 400, 150))],
+                                   size=(1080, 1920))
+    held, _ = bt.apply_failsafe(frames, 30.0)
+    got = {f.i: f for f in held}
+    for i in bad:                                                       # the item is under the blur
+        q = np.float32(got[i].poly)
+        x, y = real[i]
+        assert q[:, 0].min() <= x and q[:, 0].max() >= x + 400 and q[:, 1].min() <= y and q[:, 1].max() >= y + 150, i
+        assert got[i].state == "widened", i
+    for i in range(150, 181):                                           # good frames as tracked
+        assert got[i].state == "tracked" and got[i].poly == box(*real[i]), i
+    good = (181, 182, 183) if edge == "last" else ()
+    for i in good:
+        assert got[i].state == "tracked" and got[i].poly == box(*real[i]), i
+
+
+def test_track_anchors_weak_edge_frames_keep_their_own_box(monkeypatch):
+    """Review: an item leaving the shot past the last anchor can match 0.5-0.75 at the right place for many frames.
+    Holding only the last good box would leave it bare once it moves out from under it: a weak edge frame keeps its
+    own box too (the blur covers both)."""
+    box = lambda x, y: [(x, y), (x + 400, y), (x + 400, y + 150), (x, y + 150)]  # noqa: E731
+    real = {i: (100 + 20 * max(i - 180, 0), 1500) for i in range(150, 221)}      # leaves fast after 6.0 s
+
+    def fake_verify(video, anchors, tracks, w, h, pad=True, bars=False, sizes=None):
+        return [bt.FrameBox(i, box(*real[i]), 1.0 if i <= 180 else .6, "tracked") for i in range(150, 221)]
+
+    monkeypatch.setattr(bt, "track_box", lambda *a, **k: [])
+    monkeypatch.setattr(bt, "probe", lambda v: (1080, 1920, 30.0, False))
+    monkeypatch.setattr(_detect, "verify_track", fake_verify)
+    frames = _detect.track_anchors(Path("v.mp4"), [(5.0, (100, 1500, 400, 150)), (6.0, (100, 1500, 400, 150))],
+                                   size=(1080, 1920))
+    held, _ = bt.apply_failsafe(frames, 30.0)
+    for f in held:
+        x, y = real[f.i]
+        q = np.float32(f.poly)
+        assert q[:, 0].min() <= x and q[:, 0].max() >= x + 400 and q[:, 1].min() <= y and q[:, 1].max() >= y + 150, f.i
