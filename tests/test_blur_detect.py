@@ -9,7 +9,7 @@ import pytest
 cv2 = pytest.importorskip("cv2")
 import numpy as np  # noqa: E402
 
-SCRIPTS = Path(__file__).resolve().parents[1] / "video-ad-editor" / "scripts"
+SCRIPTS = Path(__file__).resolve().parents[1] / "arabic-video-editor" / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 import blur_track as bt  # noqa: E402
 from fixtures_blur import ean13_tile, make_code_video, qr_tile  # noqa: E402

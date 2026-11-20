@@ -5,7 +5,7 @@ import types
 from collections import namedtuple
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "video-ad-editor" / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "arabic-video-editor" / "scripts"))
 import transcribe as T  # noqa: E402
 
 Word = namedtuple("Word", "start end word probability")

@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "video-ad-editor" / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "arabic-video-editor" / "scripts"))
 from _chrome import find_chrome  # noqa: E402
 
 WIN_ENV = {
@@ -44,7 +44,7 @@ def test_edge_only():
     assert got.replace("\\", "/") == target
 
 
-FIND_CHROME_JS = Path(__file__).resolve().parents[1] / "video-ad-editor" / "scripts" / "_find_chrome.js"
+FIND_CHROME_JS = Path(__file__).resolve().parents[1] / "arabic-video-editor" / "scripts" / "_find_chrome.js"
 
 
 def _node_find(target):

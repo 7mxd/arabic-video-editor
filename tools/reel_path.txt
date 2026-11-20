@@ -1,7 +1,7 @@
-video-ad-editor/references/start.md
-video-ad-editor/references/series.md
-video-ad-editor/references/reel.md
-video-ad-editor/references/motion-rules.md
-video-ad-editor/references/scenes.md
-video-ad-editor/references/moves/INDEX.md
-video-ad-editor/references/styles.md
+arabic-video-editor/references/start.md
+arabic-video-editor/references/series.md
+arabic-video-editor/references/reel.md
+arabic-video-editor/references/motion-rules.md
+arabic-video-editor/references/scenes.md
+arabic-video-editor/references/moves/INDEX.md
+arabic-video-editor/references/styles.md

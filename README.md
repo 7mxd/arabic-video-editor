@@ -1,6 +1,6 @@
-# video-ad-editor
+# arabic-video-editor
 
-<p align="center"><img src="docs/img/hero.jpg" alt="video-ad-editor — Arabic video editing for Claude Code" width="100%"></p>
+<p align="center"><img src="docs/img/hero.jpg" alt="arabic-video-editor — Arabic video editing for Claude Code" width="100%"></p>
 
 <div dir="rtl">
 
@@ -46,18 +46,20 @@ A rebuild of an open-source Arabic video-editing plugin: same idea, rebuilt to r
 
 </div>
 
+Renamed from `video-ad-editor` in 1.2.0. If you installed the old name, run `claude plugin uninstall video-ad-editor@7mxd-plugins` first.
+
 From a local clone:
 
 ```
-claude plugin marketplace add C:/path/to/video-ad-editor
-claude plugin install video-ad-editor@7mxd-plugins
+claude plugin marketplace add C:/path/to/arabic-video-editor
+claude plugin install arabic-video-editor@7mxd-plugins
 ```
 
 From GitHub:
 
 ```
-claude plugin marketplace add 7mxd/video-ad-editor
-claude plugin install video-ad-editor@7mxd-plugins
+claude plugin marketplace add 7mxd/arabic-video-editor
+claude plugin install arabic-video-editor@7mxd-plugins
 ```
 
 <div dir="rtl">

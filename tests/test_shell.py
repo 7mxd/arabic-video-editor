@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "video-ad-editor" / "scripts"))
+sys.path.insert(0, str(ROOT / "arabic-video-editor" / "scripts"))
 import _shell as S  # noqa: E402
 
 
@@ -43,7 +43,7 @@ def test_windows_fallback_warns(capsys):
 
 def test_no_script_calls_bare_bash():
     hits = []
-    base = ROOT / "video-ad-editor"
+    base = ROOT / "arabic-video-editor"
     for p in [*base.joinpath("scripts").glob("*.py"), *base.joinpath("studio").glob("*.py"),
               *base.joinpath("motion").glob("*.py")]:
         if p.name != "_shell.py" and re.search(r"""\[\s*['"]bash['"]\s*,""", p.read_text(encoding="utf-8")):

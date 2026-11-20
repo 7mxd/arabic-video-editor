@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "video-ad-editor" / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "arabic-video-editor" / "scripts"))
 import _caps as C  # noqa: E402
 import _faces as F  # noqa: E402
 

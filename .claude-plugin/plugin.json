@@ -1,13 +1,13 @@
 {
-  "name": "video-ad-editor",
-  "version": "1.1.4",
+  "name": "arabic-video-editor",
+  "version": "1.2.0",
   "description": "Arabic video editing for Claude Code: 1 skill, 5 modes (talking-head reels, motion explainers, podcasts, montage, covers and thumbnails), series profiles, lessons and privacy blur. Based on video-ad-editor by Majed Alzaabi",
   "author": {
     "name": "7mxd",
     "url": "https://github.com/7mxd"
   },
-  "homepage": "https://github.com/7mxd/video-ad-editor",
-  "repository": "https://github.com/7mxd/video-ad-editor",
+  "homepage": "https://github.com/7mxd/arabic-video-editor",
+  "repository": "https://github.com/7mxd/arabic-video-editor",
   "upstream": "https://github.com/majedphotos/video-ad-editor",
   "license": "MIT",
   "skills": [

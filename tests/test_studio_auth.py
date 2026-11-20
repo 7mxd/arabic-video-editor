@@ -2,7 +2,7 @@
 import importlib.util
 from pathlib import Path
 
-STUDIO = Path(__file__).resolve().parents[1] / "video-ad-editor" / "studio" / "studio.py"
+STUDIO = Path(__file__).resolve().parents[1] / "arabic-video-editor" / "studio" / "studio.py"
 _spec = importlib.util.spec_from_file_location("studio", STUDIO)
 studio = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(studio)  # must not start a server

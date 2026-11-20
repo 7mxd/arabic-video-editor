@@ -16,14 +16,14 @@ def test_listing_text_reads_frontmatter(tmp_path):
 
 
 def test_report_sums_reel_path(tmp_path):
-    skill = write_skill(tmp_path / "video-ad-editor", "video-ad-editor", "desc", "Main body.\n")
-    refs = tmp_path / "video-ad-editor" / "references"
+    skill = write_skill(tmp_path / "arabic-video-editor", "arabic-video-editor", "desc", "Main body.\n")
+    refs = tmp_path / "arabic-video-editor" / "references"
     refs.mkdir()
     (refs / "a.md").write_text("alpha file", encoding="utf-8")
     (refs / "b.md").write_text("بيتا", encoding="utf-8")
     (tmp_path / "tools").mkdir()
     (tmp_path / "tools" / "reel_path.txt").write_text(
-        "video-ad-editor/references/a.md\nvideo-ad-editor/references/b.md\n", encoding="utf-8"
+        "arabic-video-editor/references/a.md\narabic-video-editor/references/b.md\n", encoding="utf-8"
     )
     body = skill.read_text(encoding="utf-8")
     files = ["alpha file", "بيتا"]
@@ -36,14 +36,14 @@ def test_report_sums_reel_path(tmp_path):
 
 
 def test_report_listing_sums_all_skills(tmp_path):
-    write_skill(tmp_path / "video-ad-editor", "video-ad-editor", "one")
+    write_skill(tmp_path / "arabic-video-editor", "arabic-video-editor", "one")
     write_skill(tmp_path / "motion-video", "motion-video", "two")
     (tmp_path / "tools").mkdir()
     (tmp_path / "tools" / "reel_path.txt").write_text("", encoding="utf-8")
 
     rep = mt.report(tmp_path, "p", counter=len)
 
-    expected = len("- p:video-ad-editor: one") + len("- p:motion-video: two")
+    expected = len("- p:arabic-video-editor: one") + len("- p:motion-video: two")
     assert rep["listing"] == expected
 
 

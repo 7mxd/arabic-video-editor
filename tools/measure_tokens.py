@@ -19,7 +19,7 @@ import tempfile
 from pathlib import Path
 
 DEFAULT_BUDGETS = {"listing": 300, "body": 3000, "reel_path": 15000}
-MAIN_SKILL = "video-ad-editor/SKILL.md"
+MAIN_SKILL = "arabic-video-editor/SKILL.md"
 CACHE_FILE = Path(__file__).resolve().parent / ".cache" / "baseline.json"
 # bump when the measuring conditions change; "tempcwd-1" = claude -p runs from the temp dir
 CACHE_SCHEMA = "tempcwd-1"

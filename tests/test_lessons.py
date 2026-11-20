@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-SCRIPTS = Path(__file__).resolve().parents[1] / "video-ad-editor" / "scripts"
+SCRIPTS = Path(__file__).resolve().parents[1] / "arabic-video-editor" / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 import lessons  # noqa: E402
 

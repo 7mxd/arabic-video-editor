@@ -50,9 +50,9 @@ REMOVED_PATHS = [
     "_pkg",
     "video-ad-editor.skill",
     "tools/build-release.sh",
-    "video-ad-editor/scripts/04b_remotion.sh",
-    "video-ad-editor/scripts/remotion-template.bundle.json",
-    "video-ad-editor/references/remotion.md",
+    "arabic-video-editor/scripts/04b_remotion.sh",
+    "arabic-video-editor/scripts/remotion-template.bundle.json",
+    "arabic-video-editor/references/remotion.md",
 ]
 
 
@@ -62,7 +62,7 @@ def test_removed_paths_absent():
 
 
 def test_no_remotion_runtime_refs():
-    keep = {"video-ad-editor/motion/moves/CREDITS.md", "video-ad-editor/motion/moves/catalog.json"}
+    keep = {"arabic-video-editor/motion/moves/CREDITS.md", "arabic-video-editor/motion/moves/catalog.json"}
     hits = _matches(
         r"04b_remotion|remotion-template|references/remotion\.md|ريموشن",
         lambda rel: rel.startswith("docs/") or rel in keep,
@@ -87,7 +87,7 @@ def test_no_python3_in_docs():
         rel = _rel(path)
         if rel == SELF or not rel.endswith(".md"):
             continue
-        if not (rel.startswith("video-ad-editor/") or rel == "README.md"):
+        if not (rel.startswith("arabic-video-editor/") or rel == "README.md"):
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
         for no, line in enumerate(text.splitlines(), 1):
@@ -99,8 +99,8 @@ def test_no_python3_in_docs():
 PYTHON3_CMD = re.compile(r"""(^|[\s;(|&`"'])python3\s""")
 PYTHON3_CMD_ALLOWED = {
     # (file, substring of the allowed line): launcher probes that try python3 on purpose
-    ("video-ad-editor/scripts/_compat.sh", "for c in python python3 py"),
-    ("video-ad-editor/scripts/_find_chrome.js", "['python', 'python3', 'py']"),
+    ("arabic-video-editor/scripts/_compat.sh", "for c in python python3 py"),
+    ("arabic-video-editor/scripts/_find_chrome.js", "['python', 'python3', 'py']"),
 }
 COMMENT_PREFIXES = ("#", "//", "/*", "*")
 
@@ -110,7 +110,7 @@ def test_no_python3_command_in_scripts():
     hits = []
     for path in tracked_text_files():
         rel = _rel(path)
-        if not rel.startswith("video-ad-editor/") or not rel.endswith((".sh", ".js")):
+        if not rel.startswith("arabic-video-editor/") or not rel.endswith((".sh", ".js")):
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
         for no, line in enumerate(text.splitlines(), 1):
@@ -124,7 +124,7 @@ def test_no_python3_command_in_scripts():
 
 # ---------- Task 6: one router skill ----------
 
-SKILL_DIR = ROOT / "video-ad-editor"
+SKILL_DIR = ROOT / "arabic-video-editor"
 MODE_REFS = ["reel.md", "motion.md", "podcast.md", "montage.md", "cover.md"]
 
 
@@ -140,7 +140,7 @@ def test_single_skill():
         lambda r: r.split("/")[-1] == "SKILL.md"
         and not r.startswith(("docs/", ".superpowers/"))
     )
-    assert skills == ["video-ad-editor/SKILL.md"]
+    assert skills == ["arabic-video-editor/SKILL.md"]
 
 
 def test_router_links_exist():
@@ -198,20 +198,20 @@ def test_attribution():
     assert "Copyright (c) 2026 7mxd" in lic
     readme = (ROOT / "README.md").read_text(encoding="utf-8-sig")
     # the README opens with this project; the credit to the original sits in its own section at the end
-    assert readme.splitlines()[0] == "# video-ad-editor"
+    assert readme.splitlines()[0] == "# arabic-video-editor"
     credits = readme.split("\n## الشكر · Credits\n")
     assert len(credits) == 2 and CREDIT in credits[1]
     plugin = json.loads((ROOT / ".claude-plugin/plugin.json").read_text(encoding="utf-8"))
     assert plugin["upstream"] == "https://github.com/majedphotos/video-ad-editor"
     assert plugin["description"].endswith("Based on video-ad-editor by Majed Alzaabi")
-    version = (ROOT / "video-ad-editor/VERSION").read_text(encoding="utf-8").strip()
+    version = (ROOT / "arabic-video-editor/VERSION").read_text(encoding="utf-8").strip()
     latest = re.search(r"^## (\d+\.\d+\.\d+)", (ROOT / "CHANGELOG.md").read_text(encoding="utf-8"), re.M).group(1)
     assert plugin["version"] == version == latest
 
 
 def test_setup_installs_from_lockfile():
     """`00_setup.sh --install` must not rewrite the tracked package.json/lock (npm i bumps them)."""
-    setup = (ROOT / "video-ad-editor/scripts/00_setup.sh").read_text(encoding="utf-8")
+    setup = (ROOT / "arabic-video-editor/scripts/00_setup.sh").read_text(encoding="utf-8")
     assert re.search(r"npm ci\b", setup)
     assert not re.search(r"npm (i|install)\b", setup)
 
@@ -239,7 +239,7 @@ def test_scripts_are_utf8_on_windows():
     the locale unless the file installs the UTF-8 open shim (builtins.open patched)."""
     import ast
     bad = []
-    base = ROOT / "video-ad-editor"
+    base = ROOT / "arabic-video-editor"
     for path in sorted([*base.joinpath("scripts").glob("*.py"), *base.joinpath("studio").glob("*.py"),
                         *base.joinpath("motion").glob("*.py")]):
         src = path.read_text(encoding="utf-8")
@@ -263,8 +263,8 @@ def test_readme_local_links_exist():
 
 def test_python_launcher_order_matches():
     """_compat.sh (shell) and _find_chrome.js (node) must try the same launchers in the same order."""
-    sh = (ROOT / "video-ad-editor/scripts/_compat.sh").read_text(encoding="utf-8")
-    js = (ROOT / "video-ad-editor/scripts/_find_chrome.js").read_text(encoding="utf-8")
+    sh = (ROOT / "arabic-video-editor/scripts/_compat.sh").read_text(encoding="utf-8")
+    js = (ROOT / "arabic-video-editor/scripts/_find_chrome.js").read_text(encoding="utf-8")
     sh_order = re.search(r"for c in ([\w ]+); do", sh).group(1).split()
     js_order = re.findall(r"'(\w+)'", re.search(r"for \(const c of \[([^\]]+)\]\)", js).group(1))
     assert sh_order == js_order == ["python", "python3", "py"]

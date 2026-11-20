@@ -4,7 +4,7 @@ import json
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "video-ad-editor" / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "arabic-video-editor" / "scripts"))
 import _landscape as L  # noqa: E402
 
 CENTRE = [606, 1080, 657, 0]

@@ -1,10 +1,10 @@
-# Status — 2026-11-13
+# Status — 2026-11-18
 
-Version 1.1.3 on branch `rebuild`, based on upstream 6.3.0 (commit a69492d). Public repo: https://github.com/7mxd/video-ad-editor
+Version 1.2.0 (renamed from `video-ad-editor`) on branch `rebuild`, based on upstream 6.3.0 (commit a69492d). Public repo: https://github.com/7mxd/arabic-video-editor
 
 ## Current state
 
-- One plugin (`video-ad-editor`), one skill, five modes (reel, motion, podcast, montage, cover), plus CapCut export, studio and privacy blur.
+- One plugin (`arabic-video-editor`), one skill, five modes (reel, motion, podcast, montage, cover), plus CapCut export, studio and privacy blur.
 - Series cards, per-video approaches and the lessons loop live under `VAE_HOME` (default `~/.video-ad-editor`).
 - The paid hand-edit route, the Remotion route, `_pkg/`, the stale `.skill` file and self-update are gone.
 - Audit findings 1–16: all fixed. Details in [CHANGELOG.md](CHANGELOG.md).
@@ -30,9 +30,9 @@ ffmpeg -ss 421 -i C:/tmp/vae-e2e/src/podcast.mp4 -t 28 -c:v libx264 -crf 16 -pix
 ffmpeg -ss 421 -i C:/tmp/vae-e2e/src/podcast.mp4 -t 28 -vf "crop=606:1080:946:0,scale=1080:1920:flags=lanczos"   -c:v libx264 -crf 16 -pix_fmt yuv420p -c:a aac -b:a 192k C:/tmp/vae-e2e/sample.mp4      # 9:16 around the speaker
 ```
 
-**Install.** `claude plugin marketplace add .` (from the repo root) · `claude plugin install video-ad-editor@7mxd-plugins` · `claude plugin list` (listed once) · `claude plugin details video-ad-editor@7mxd-plugins` (Skills (1) `video-ad-editor`).
+**Install.** `claude plugin marketplace add .` (from the repo root) · `claude plugin install arabic-video-editor@7mxd-plugins` · `claude plugin list` (listed once) · `claude plugin details arabic-video-editor@7mxd-plugins` (Skills (1) `arabic-video-editor`).
 
-**Reel** (from `video-ad-editor/`, `W=C:/tmp/vae-e2e`):
+**Reel** (from `arabic-video-editor/`, `W=C:/tmp/vae-e2e`):
 
 ```bash
 bash scripts/00_setup.sh && bash scripts/00_setup.sh --install          # puppeteer-core 25.10.0 via npm ci
@@ -160,7 +160,7 @@ Stages: convert 34 s · `detect --kinds barcode` 14 s · `keyframes` 3 s (8 fram
 ## Pending
 
 - **End-to-end checks:** the visual checks of the side-by-side sheet and of the blur QA sheet came back OK. The whole-branch code review is run separately.
-- **Install from GitHub:** `claude plugin marketplace add 7mxd/video-ad-editor` then `claude plugin install video-ad-editor@7mxd-plugins`, replacing the local-clone install.
+- **Install from GitHub:** `claude plugin marketplace add 7mxd/arabic-video-editor` then `claude plugin install arabic-video-editor@7mxd-plugins`, replacing the local-clone install.
 - **After that:** move the existing series cards and lessons onto this plugin.
 
 ## Known limitations

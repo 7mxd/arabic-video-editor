@@ -6,7 +6,7 @@
   "description": "Claude Code plugins by 7mxd",
   "plugins": [
     {
-      "name": "video-ad-editor",
+      "name": "arabic-video-editor",
       "source": "./",
       "description": "Arabic video editing: 1 skill, 5 modes (reels, motion, podcast, montage, covers). Based on video-ad-editor by Majed Alzaabi"
     }

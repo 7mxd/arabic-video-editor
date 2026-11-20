@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0 — 2026-11-18
+
+### Changed
+
+- **Renamed to `arabic-video-editor`** (was `video-ad-editor`): the plugin now makes reels, motion explainers, podcasts, montages, covers and privacy blur, not only ads. The repo is now `7mxd/arabic-video-editor` (GitHub redirects the old URL), the skill folder is `arabic-video-editor/`, and the install name is `arabic-video-editor@7mxd-plugins`. Saved data stays in `~/.video-ad-editor` (`VAE_HOME`), so profiles, series cards, lessons and the face model carry over. Credit to the original, majedphotos/video-ad-editor by Majed Alzaabi, is unchanged.
+
 ## 1.1.4 — 2026-11-14
 
 ### Fixed

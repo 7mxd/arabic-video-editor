@@ -4,11 +4,11 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "video-ad-editor" / "scripts"))
+sys.path.insert(0, str(ROOT / "arabic-video-editor" / "scripts"))
 import _fonts  # noqa: E402
 from _fonts import BUNDLED, font_css  # noqa: E402
 
-FONTS_DIR = ROOT / "video-ad-editor" / "motion" / "fonts"
+FONTS_DIR = ROOT / "arabic-video-editor" / "motion" / "fonts"
 BASE = "file:///fonts/"
 
 
@@ -58,7 +58,7 @@ def test_fonts_css_matches_bundle():
 
 
 def test_js_mirror_has_same_families():
-    js = (ROOT / "video-ad-editor" / "scripts" / "_fonts.js").read_text(encoding="utf-8")
+    js = (ROOT / "arabic-video-editor" / "scripts" / "_fonts.js").read_text(encoding="utf-8")
     for fam, weights in _fonts._WEIGHTS.items():
         assert f"'{fam}'" in js
         for f in weights.values():
